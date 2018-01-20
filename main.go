@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/dennis-hong/hongi/kakaobot"
+	"github.com/dennis-hong/hongi-api/kakaobot"
 	"github.com/gin-gonic/gin"
 	log "github.com/Sirupsen/logrus"
 	"os"
