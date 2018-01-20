@@ -1,6 +1,9 @@
 package main
 
-import "github.com/gin-gonic/gin"
+import (
+	"github.com/gin-gonic/gin"
+	"log"
+)
 
 type KakaoReq struct {
 	UserAction Action `json:"action"`
@@ -12,6 +15,7 @@ type Action struct {
 
 func main() {
 	r := gin.Default()
+	r.Use(gin.Logger())
 	r.GET("/ping", func(c *gin.Context) {
 		c.JSON(200, gin.H{
 			"message": "pong",
@@ -23,6 +27,7 @@ func main() {
 		keys := make([]string, 0, len(kakaoReq.UserAction.Params))
 		for k := range kakaoReq.UserAction.Params {
 			keys = append(keys, k)
+			log.Println(keys)
 		}
 
 		c.JSON(200, gin.H{"user": "", "value": ""})
