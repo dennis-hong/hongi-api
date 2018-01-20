@@ -1,26 +1,24 @@
 package main
 
 import (
+	"github.com/dennis-hong/hongi/kakaobot"
 	"github.com/gin-gonic/gin"
-	"log"
+	log "github.com/Sirupsen/logrus"
+	"os"
 )
 
-type KakaoReq struct {
-	UserAction Action `json:"action"`
+func init() {
+	// Log as JSON instead of the default ASCII formatter.
+	log.SetFormatter(&log.JSONFormatter{})
+
+	// Output to stdout instead of the default stderr
+	// Can be any io.Writer, see below for File example
+	log.SetOutput(os.Stdout)
+
+	// Only log the warning severity or above.
+	log.SetLevel(log.DebugLevel)
 }
 
-type Action struct {
-	Params map[string]string `json:"params"`
-}
-
-type KakaoRes struct {
-	Contents []KakaoText `json:"contents"`
-}
-
-type KakaoText struct {
-	Type string `json:"type"`
-	Text string `json:"text"`
-}
 
 func main() {
 	r := gin.Default()
@@ -33,15 +31,15 @@ func main() {
 			})
 		})
 		v1.POST("/somePost", func(c *gin.Context) {
-			var kakaoReq KakaoReq
+			var kakaoReq kakaobot.KakaoReq
 			c.BindJSON(&kakaoReq)
 			keys := make([]string, 0, len(kakaoReq.UserAction.Params))
 			for k := range kakaoReq.UserAction.Params {
 				keys = append(keys, k)
-				log.Println(keys)
+				log.Debugf("keys : %s", keys)
 			}
-
-			ka := KakaoRes{[]KakaoText{{Type:"text", Text:"test"}}}
+			log.Debugf("kakaoReq : %s", kakaoReq)
+			ka := kakaobot.KakaoRes{[]kakaobot.KakaoText{{Type: "text", Text: "test"}}}
 			c.JSON(200, ka)
 		})
 	}
