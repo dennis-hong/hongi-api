@@ -13,6 +13,15 @@ type Action struct {
 	Params map[string]string `json:"params"`
 }
 
+type KakaoRes struct {
+	Contents []KakaoText `json:"contents"`
+}
+
+type KakaoText struct {
+	Type string `json:"type"`
+	Text string `json:"text"`
+}
+
 func main() {
 	r := gin.Default()
 
@@ -32,7 +41,8 @@ func main() {
 				log.Println(keys)
 			}
 
-			c.JSON(200, gin.H{"user": "", "value": ""})
+			ka := KakaoRes{[]KakaoText{{Type:"text", Text:"test"}}}
+			c.JSON(200, ka)
 		})
 	}
 
